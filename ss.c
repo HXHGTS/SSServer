@@ -10,7 +10,7 @@ int main()
     printf("请选择操作:\n1.升级系统内核(安装BBR必需)\n2.搭建Shadowsocks服务器\n3.启动Shadowsocks服务器\n4.修改服务器配置\n5.重启Shadowsocks服务器\n6.关闭Shadowsocks服务器\n7.退出\n请输入:");
     scanf("%d", &run_mode);
     if (run_mode == 1) {
-
+        KernelUpdate();
     }
     else if (run_mode == 2) {
         CreateServer();
