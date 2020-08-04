@@ -38,12 +38,13 @@ int CreateServer() {
     system("pip install greenlet");
     system("pip install gevent");
     system("pip install shadowsocks");
+    system("pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
 
 int RunServer() {
-    char ip[16],passwd[30];
+    char passwd[30];
     int port;
     if ((fopen("ss.conf", "r")) != NULL) {
         system("ssserver -c ss.conf -d start");
@@ -51,15 +52,13 @@ int RunServer() {
     }
     else {
         printf("正在创建配置文件. . .\n");
-        printf("请输入服务器ip地址:");
-        scanf("%s", ip);
         printf("请输入服务器外部访问端口:");
         scanf("%d",&port);
         printf("请输入密码:");
         scanf("%s", passwd);
         config = fopen("ss.conf", "w");
         fprintf(config, "{\n");
-        fprintf(config, "	\"server\":\"my_server_ip\",\n");
+        fprintf(config, "	\"server\":\"0.0.0.0\",\n");
         fprintf(config, "	\"local_address\": \"127.0.0.1\",\n");
         fprintf(config, "	\"local_port\":1080,\n");
         fprintf(config, "	\"port_password\":{\n");
