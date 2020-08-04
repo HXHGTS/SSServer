@@ -6,7 +6,7 @@ CentOS7搭建Shadowsocks并开启BBR
 
 直接运行(仅支持CentOS7)：
 
-sudo yum install -y gcc
+sudo yum install -y gcc wget
 
 wget https://github.com/HXHGTS/SSServer/raw/master/ss.c
 
