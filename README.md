@@ -16,4 +16,9 @@ gcc -o ss ss.c
 
 sudo ./ss
 
-Kernel版本低于5的务必先进行内核升级再安装！
+Kernel版本低于5的务必先进行内核升级再安装，否则会导致BBR加速开启失败！
+
+内核升级后可能要重新安装gcc:
+
+sudo yum install -y gcc
+
