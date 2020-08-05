@@ -16,7 +16,3 @@ gcc -o ss ss.c
 
 sudo ./ss
 
-脚本会自动升级系统内核，重启后需要重新安装gcc，否则将无法识别脚本:
-
-sudo yum install -y gcc
-
