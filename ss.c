@@ -73,8 +73,6 @@ int RunServer() {
         fprintf(config, "\"fast_open\":false\n");
         fprintf(config, "}\n");
         fclose(config);
-        printf("生成的Server端配置如下:\n");
-        system("cat ss.conf");
         printf("正在优化服务器数据吞吐量与网络连接性能. . .\n");
         system("echo \"ulimit -n 51200\" >> /etc/rc.d/rc.local");
         config = fopen("/etc/sysctl.d/local.conf", "w");
@@ -114,6 +112,11 @@ int RunServer() {
         system("echo \"DNS2=8.8.4.4\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
         system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
         system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
+        printf("生成的Server端配置如下:\n");
+        printf("-----------------------------\n");
+        system("cat ss.conf");
+        printf("-----------------------------\n");
+        printf("请参照上述配置修改客户端!\n");
         printf("正在重启服务器以应用配置. . .\n");
         system("reboot");
     }
@@ -124,6 +127,11 @@ int EditConfig() {
     system("ssserver -c ss.conf -d stop");
     system("vi ss.conf");
     system("ssserver -c ss.conf -d start");
+    printf("生成的Server端配置如下:\n");
+    printf("-----------------------------\n");
+    system("cat ss.conf");
+    printf("-----------------------------\n");
+    printf("请参照上述配置修改客户端!\n");
     printf("Shadowsocks服务器配置已修改!\n");
     return 0;
 }
