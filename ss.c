@@ -9,7 +9,7 @@ int main()
 {
     printf("当前系统内核版本号:\n");
     system("uname -sr");
-    printf("请选择操作:\n1搭建Shadowsocks服务器\n2.启动Shadowsocks服务器\n3.修改服务器配置\n4.重启Shadowsocks服务器\n5.关闭Shadowsocks服务器\n6.退出\n请输入:");
+    printf("请选择操作:\n1.搭建Shadowsocks服务器\n2.启动Shadowsocks服务器\n3.修改服务器配置\n4.重启Shadowsocks服务器\n5.关闭Shadowsocks服务器\n6.退出\n请输入:");
     scanf("%d", &run_mode);
     if (run_mode == 1) {
         KernelUpdate();
