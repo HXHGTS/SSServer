@@ -110,7 +110,7 @@ int RunServer() {
         printf("将服务器DNS修改为谷歌DNS. . .\n");
         system("echo \"DNS1=8.8.8.8\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
         system("echo \"DNS2=8.8.4.4\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"nameserver 8.8.8.8\" >> /etc/resolv.conf");
+        system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
         system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
         printf("正在重启服务器以应用配置. . .\n");
         system("reboot");
