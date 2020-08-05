@@ -9,33 +9,31 @@ int main()
 {
     printf("当前系统内核版本号:\n");
     system("uname -sr");
-    printf("请选择操作:\n1.升级系统内核(安装BBR必需)\n2.搭建Shadowsocks服务器\n3.启动Shadowsocks服务器\n4.修改服务器配置\n5.重启Shadowsocks服务器\n6.关闭Shadowsocks服务器\n7.退出\n请输入:");
+    printf("请选择操作:\n1搭建Shadowsocks服务器\n2.启动Shadowsocks服务器\n3.修改服务器配置\n4.重启Shadowsocks服务器\n5.关闭Shadowsocks服务器\n6.退出\n请输入:");
     scanf("%d", &run_mode);
     if (run_mode == 1) {
         KernelUpdate();
-    }
-    else if (run_mode == 2) {
         CreateServer();
     }
-    else if (run_mode == 3) {
+    else if (run_mode == 2) {
         RunServer();
     }
-    else if (run_mode == 4) {
+    else if (run_mode == 3) {
         EditConfig();
     }
-    else if (run_mode == 5) {
+    else if (run_mode == 4) {
         RestartServer();
     }
-    else if (run_mode == 6) {
+    else if (run_mode == 5) {
         StopServer();
     }
-    else if (run_mode == 7) {
+    else if (run_mode == 6) {
         exit(0);
     }
     return 0;
 }
 int CreateServer() {
-    system("yum install python python-pip libevent libsodium -y");
+    system("yum install python python-pip libevent libsodium pwgen -y");
     system("pip install --upgrade pip");
     system("pip install greenlet");
     system("pip install gevent");
@@ -56,23 +54,26 @@ int RunServer() {
         printf("正在创建配置文件. . .\n");
         printf("请输入服务器外部访问端口:");
         scanf("%d",&port);
-        printf("请输入密码:");
-        scanf("%s", passwd);
+        printf("正在生成随机强密码. . .\n");
+        system("pwgen -cnys 28 1 > passwd.conf");
+        config = fopen("passwd.conf", "r");
+        fscanf(config, "%s", passwd);
+        fclose(config);
         config = fopen("ss.conf", "w");
         fprintf(config, "{\n");
-        fprintf(config, "\"server\":\"0.0.0.0\",\n");
-        fprintf(config, "\"local_address\": \"127.0.0.1\",\n");
-        fprintf(config, "\"local_port\":1080,\n");
-        fprintf(config, "\"port_password\":{\n");
-        fprintf(config, "\"%d\":\"%s\"\n",port,passwd);
-        fprintf(config, "},\n");
-        fprintf(config, "\"timeout\":300,");
-        fprintf(config, "\"method\":\"chacha20-ietf-poly1305\",\n");
-        fprintf(config, "\"fast_open\":false\n");
+        fprintf(config, "   \"server\":\"0.0.0.0\",\n");
+        fprintf(config, "   \"local_address\": \"127.0.0.1\",\n");
+        fprintf(config, "   \"local_port\":1080,\n");
+        fprintf(config, "   \"port_password\":{\n");
+        fprintf(config, "       \"%d\":\"%s\"\n",port,passwd);
+        fprintf(config, "   },\n");
+        fprintf(config, "   \"timeout\":300,");
+        fprintf(config, "   \"method\":\"chacha20-ietf-poly1305\",\n");
+        fprintf(config, "   \"fast_open\":false\n");
         fprintf(config, "}\n");
         fclose(config);
-        printf("已生成默认配置，需要修改请直接在编辑器中修改. . .\n");
-        system("vi ss.conf");
+        printf("生成的Server端配置如下:\n");
+        system("cat ss.conf");
         printf("正在优化服务器数据吞吐量与网络连接性能. . .\n");
         system("echo \"ulimit -n 51200\" >> /etc/rc.d/rc.local");
         config = fopen("/etc/sysctl.d/local.conf", "w");
@@ -139,19 +140,20 @@ int RestartServer() {
 }
 
 int KernelUpdate() {
-    system("yum install -y wget");
-    if (system("grep \"151.101.108.133 raw.githubusercontent.com\" /etc/hosts") != 0) {
-        system("echo \"151.101.108.133 raw.githubusercontent.com\" >> /etc/hosts");
-    }
-    if (system("grep  \"52.78.231.108 github.com\" /etc/hosts") != 0) {
+    if ((fopen("preload.sh", "r")) == NULL) {
+        system("yum install -y wget");
+        if (system("grep \"151.101.108.133 raw.githubusercontent.com\" /etc/hosts") != 0) {
+            system("echo \"151.101.108.133 raw.githubusercontent.com\" >> /etc/hosts");
+        }
+        if (system("grep  \"52.78.231.108 github.com\" /etc/hosts") != 0) {
+            system("echo \"52.78.231.108 github.com\" >> /etc/hosts");
+        }
         system("echo \"52.78.231.108 github.com\" >> /etc/hosts");
+        system("wget https://github.com/HXHGTS/WireGuardServer/raw/master/preload.sh");
+        system("chmod +x preload.sh");
+        system("bash preload.sh");
+        printf("升级完成，正在重启服务器以应用配置. . .\n");
+        system("reboot");
     }
-    system("echo \"52.78.231.108 github.com\" >> /etc/hosts");
-    system("rm -f preload.sh");
-    system("wget https://github.com/HXHGTS/WireGuardServer/raw/master/preload.sh");
-    system("chmod +x preload.sh");
-    system("bash preload.sh");
-    printf("升级完成，正在重启服务器以应用配置. . .\n");
-    system("reboot");
     return 0;
 }
