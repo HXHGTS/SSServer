@@ -55,10 +55,11 @@ int RunServer() {
         printf("请输入服务器外部访问端口:");
         scanf("%d",&port);
         printf("正在生成随机强密码. . .\n");
-        system("pwgen -cnys 28 1 > passwd.conf");
+        system("pwgen -s 28 1 > passwd.conf");
         config = fopen("passwd.conf", "r");
         fscanf(config, "%s", passwd);
         fclose(config);
+        system("rm -rf passwd.conf");
         config = fopen("ss.conf", "w");
         fprintf(config, "{\n");
         fprintf(config, "\"server\":\"0.0.0.0\",\n");
@@ -154,6 +155,9 @@ int KernelUpdate() {
         system("bash preload.sh");
         printf("升级完成，正在重启服务器以应用配置. . .\n");
         system("reboot");
+    }
+    else {
+        system("yum remove -y $(rpm -qa | grep kernel | grep -v $(uname -r))");
     }
     return 0;
 }
