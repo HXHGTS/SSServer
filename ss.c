@@ -107,6 +107,9 @@ int RunServer() {
         printf("正在将Shadowsocks写入开机启动项. . .\n");
         system("echo \"/usr/bin/ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
         system("chmod +x /etc/rc.d/rc.local");
+        printf("将服务器DNS修改为谷歌DNS. . .\n");
+        system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
+        system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
         printf("正在重启服务器以应用配置. . .\n");
         system("reboot");
     }
