@@ -75,7 +75,6 @@ int RunServer() {
         system("vi ss.conf");
         printf("正在优化服务器数据吞吐量与网络连接性能. . .\n");
         system("echo \"ulimit -n 51200\" >> /etc/rc.d/rc.local");
-        system("chmod +x /etc/rc.d/rc.local");
         config = fopen("/etc/sysctl.d/local.conf", "w");
         fprintf(config, "fs.file-max = 51200\n");
         fprintf(config, "net.core.rmem_max = 67108864\n");
@@ -106,11 +105,8 @@ int RunServer() {
         system("sysctl -p");
         printf("BBR加速已启动!\n");
         printf("正在将Shadowsocks写入开机启动项. . .\n");
-        config = fopen("/etc/systemd/system/shadowsocks.service", "w");
-        fprintf(config, "[Unit]\nDescription=Shadowsocks\n\n[Service]\nTimeoutStartSec=0\nExecStart=/usr/bin/ssserver -c ss.conf -d start\n\n[Install]\nWantedBy=multi-user.target\n");
-        fclose(config);
-        system("chmod +x /etc/systemd/system/shadowsocks.service");
-        system("systemctl enable shadowsocks");
+        system("echo \"/usr/bin/ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
+        system("chmod +x /etc/rc.d/rc.local");
         printf("正在重启服务器以应用配置. . .\n");
         system("reboot");
     }
