@@ -107,7 +107,7 @@ int RunServer() {
         printf("BBR加速已启动!\n");
         printf("正在将Shadowsocks写入开机启动项. . .\n");
         config = fopen("/etc/systemd/system/shadowsocks.service", "w");
-        fprintf(config, "[Unit]\nDescription=Shadowsocks\n\n[Service]\nTimeoutStartSec=0\nExecStart=ssserver -c ss.conf -d start\n\n[Install]\nWantedBy=multi-user.target\n");
+        fprintf(config, "[Unit]\nDescription=Shadowsocks\n\n[Service]\nTimeoutStartSec=0\nExecStart=/usr/bin/ssserver -c ss.conf -d start\n\n[Install]\nWantedBy=multi-user.target\n");
         fclose(config);
         system("chmod +x /etc/systemd/system/shadowsocks.service");
         system("systemctl enable shadowsocks");
