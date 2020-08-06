@@ -94,30 +94,10 @@ int RunServer() {
         fprintf(config, "}\n");
         fclose(config);
         printf("正在优化服务器数据吞吐量与网络连接性能. . .\n");
-        system("echo \"ulimit -n 51200\" >> /etc/rc.d/rc.local");
-        config = fopen("/etc/sysctl.d/local.conf", "w");
-        fprintf(config, "fs.file-max = 51200\n");
-        fprintf(config, "net.core.rmem_max = 67108864\n");
-        fprintf(config, "net.core.wmem_max = 67108864\n");
-        fprintf(config, "net.core.rmem_default = 65536\n");
-        fprintf(config, "net.core.wmem_default = 65536\n");
-        fprintf(config, "net.core.netdev_max_backlog = 4096\n");
-        fprintf(config, "net.core.somaxconn = 4096\n");
-        fprintf(config, "net.ipv4.tcp_syncookies = 1\n");
-        fprintf(config, "net.ipv4.tcp_tw_reuse = 1\n");
-        fprintf(config, "net.ipv4.tcp_tw_recycle = 0\n");
-        fprintf(config, "net.ipv4.tcp_fin_timeout = 30\n");
-        fprintf(config, "net.ipv4.tcp_keepalive_time = 1200\n");
-        fprintf(config, "net.ipv4.ip_local_port_range = 10000 65000\n");
-        fprintf(config, "net.ipv4.tcp_max_syn_backlog = 4096\n");
-        fprintf(config, "net.ipv4.tcp_max_tw_buckets = 5000\n");
-        fprintf(config, "net.ipv4.tcp_fastopen = 3\n");
-        fprintf(config, "net.ipv4.tcp_rmem = 4096 87380 67108864\n");
-        fprintf(config, "net.ipv4.tcp_wmem = 4096 65536 67108864\n");
-        fprintf(config, "net.ipv4.tcp_mtu_probing = 1\n");
-        fclose(config);
-        system("chmod +x /etc/sysctl.d/local.conf");
-        system("sysctl --system");
+        system("echo \"* soft nofile 65535\" > /etc/security/limits.conf");
+        system("echo \"* hard nofile 65535\" >> /etc/security/limits.conf");
+        system("echo \"ulimit -n 65535\" >> /etc/rc.d/rc.local");
+        system("echo \"ulimit -u 65535\" >> /etc/rc.d/rc.local");
         system("modprobe tcp_bbr");
         system("echo \"tcp_bbr\" >> /etc/modules-load.d/modules.conf");
         system("echo \"net.core.default_qdisc = fq\" >> /etc/sysctl.conf");
@@ -127,11 +107,13 @@ int RunServer() {
         printf("正在将Shadowsocks写入开机启动项. . .\n");
         system("echo \"/usr/bin/ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
         system("chmod +x /etc/rc.d/rc.local");
-        printf("将服务器DNS修改为谷歌DNS. . .\n");
-        system("echo \"DNS1=8.8.8.8\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"DNS2=8.8.4.4\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
-        system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
+        printf("将服务器DNS修改为Cloudflare DNS + Cisco OpenDNS . . .\n");
+        system("echo \"DNS1=1.1.1.1\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
+        system("echo \"DNS2=1.0.0.1\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
+        system("echo \"DNS3=208.67.222.222\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
+        system("echo \"nameserver 1.1.1.1\" > /etc/resolv.conf");
+        system("echo \"nameserver 1.0.0.1\" >> /etc/resolv.conf");
+        system("echo \"nameserver 208.67.222.222\" >> /etc/resolv.conf");
         printf("生成的客户端端配置如下:\n");
         printf("-----------------------------\n");
         system("cat ss-client.conf");
@@ -171,13 +153,6 @@ int RestartServer() {
 int KernelUpdate() {
     if ((fopen("preload.sh", "r")) == NULL) {
         system("yum install -y wget");
-        if (system("grep \"151.101.108.133 raw.githubusercontent.com\" /etc/hosts") != 0) {
-            system("echo \"151.101.108.133 raw.githubusercontent.com\" >> /etc/hosts");
-        }
-        if (system("grep  \"52.78.231.108 github.com\" /etc/hosts") != 0) {
-            system("echo \"52.78.231.108 github.com\" >> /etc/hosts");
-        }
-        system("echo \"52.78.231.108 github.com\" >> /etc/hosts");
         system("wget https://github.com/HXHGTS/WireGuardServer/raw/master/preload.sh");
         system("chmod +x preload.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
