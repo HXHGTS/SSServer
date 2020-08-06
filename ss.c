@@ -4,6 +4,7 @@
 int run_mode;
 int CreateServer(), RunServer(), StopServer(), EditConfig(), RestartServer();
 FILE* config;
+char server_ip[16];
 
 int main()
 {
@@ -59,7 +60,13 @@ int RunServer() {
         config = fopen("passwd.conf", "r");
         fscanf(config, "%s", passwd);
         fclose(config);
+        system("yum install curl -y");
+        system("curl ifconfig.me > ip.conf");
+        config = fopen("ip.conf", "r");
+        fscanf(config, "%s", server_ip);
+        fclose(config);
         system("rm -rf passwd.conf");
+        system("rm -rf ip.conf");
         config = fopen("ss.conf", "w");
         fprintf(config, "{\n");
         fprintf(config, "\"server\":\"0.0.0.0\",\n");
@@ -67,6 +74,19 @@ int RunServer() {
         fprintf(config, "\"local_port\":1080,\n");
         fprintf(config, "\"port_password\":{\n");
         fprintf(config, "\"%d\":\"%s\"\n",port,passwd);
+        fprintf(config, "},\n");
+        fprintf(config, "\"timeout\":300,\n");
+        fprintf(config, "\"method\":\"chacha20-ietf-poly1305\",\n");
+        fprintf(config, "\"fast_open\":false\n");
+        fprintf(config, "}\n");
+        fclose(config);
+        config = fopen("ss-client.conf", "w");
+        fprintf(config, "{\n");
+        fprintf(config, "\"server\":\"%s\",\n",server_ip);
+        fprintf(config, "\"local_address\": \"127.0.0.1\",\n");
+        fprintf(config, "\"local_port\":1080,\n");
+        fprintf(config, "\"port_password\":{\n");
+        fprintf(config, "\"%d\":\"%s\"\n", port, passwd);
         fprintf(config, "},\n");
         fprintf(config, "\"timeout\":300,\n");
         fprintf(config, "\"method\":\"chacha20-ietf-poly1305\",\n");
@@ -112,9 +132,9 @@ int RunServer() {
         system("echo \"DNS2=8.8.4.4\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
         system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
         system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
-        printf("生成的Server端配置如下:\n");
+        printf("生成的客户端端配置如下:\n");
         printf("-----------------------------\n");
-        system("cat ss.conf");
+        system("cat ss-client.conf");
         printf("-----------------------------\n");
         printf("请参照上述配置修改客户端!\n");
         printf("正在重启服务器以应用配置. . .\n");
