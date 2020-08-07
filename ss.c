@@ -34,7 +34,6 @@ int main()
     return 0;
 }
 int CreateServer() {
-    system("yum -y groupinstall \"Development tools\"");
     system("yum install -y libevent libsodium pwgen");
     system("yum install -y python3-pip python3");
     system("pip3 install --upgrade pip");
