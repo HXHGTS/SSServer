@@ -35,21 +35,18 @@ int main()
 }
 int CreateServer() {
     system("yum -y groupinstall \"Development tools\"");
-    system("yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel");
-    system("yum install libffi-devel -y");
+    system("yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel libevent libsodium pwgen");
     system("wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz");
     system("tar -xvJf Python-3.8.5.tar.xz");
     system("mkdir /usr/local/python3");
-    system("cd Python-3.8.5 && ./configure --prefix=/usr/local/python3");
-    system("make && make install");
+    system("cd Python-3.8.5 && ./configure --prefix=/usr/local/python3 && make && make install");
     system("ln -s /usr/local/python3/bin/python3 /usr/local/bin/python3");
     system("ln -s /usr/local/python3/bin/pip3 /usr/local/bin/pip3");
-    system("pip install --upgrade pip");
-    system("pip install greenlet");
-    system("pip install gevent");
-    system("pip install shadowsocks");
-    system("pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
-    system("yum install libevent libsodium pwgen -y");
+    system("pip3 install --upgrade pip");
+    system("pip3 install greenlet");
+    system("pip3 install gevent");
+    system("pip3 install shadowsocks");
+    system("pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
