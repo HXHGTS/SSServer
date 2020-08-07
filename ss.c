@@ -106,7 +106,7 @@ int RunServer() {
         system("sysctl -p");
         printf("BBR加速已启动!\n");
         printf("正在将Shadowsocks写入开机启动项. . .\n");
-        system("echo \"/usr/bin/ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
+        system("echo \"ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
         system("chmod +x /etc/rc.d/rc.local");
         printf("将服务器DNS修改为Cloudflare DNS + Cisco OpenDNS . . .\n");
         system("echo \"DNS1=1.1.1.1\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
