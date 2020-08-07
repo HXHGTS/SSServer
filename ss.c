@@ -39,7 +39,8 @@ int CreateServer() {
     system("pip3 install --upgrade pip");
     system("pip3 install greenlet");
     system("pip3 install gevent");
-    system("sudo pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip");
+    system("pip3 install wheel");
+    system("pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
