@@ -34,12 +34,22 @@ int main()
     return 0;
 }
 int CreateServer() {
-    system("yum install python python-pip libevent libsodium pwgen -y");
+    system("yum -y groupinstall \"Development tools\"");
+    system("yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel");
+    system("yum install libffi-devel -y");
+    system("wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz");
+    system("tar -xvJf Python-3.8.5.tar.xz");
+    system("mkdir /usr/local/python3");
+    system("cd Python-3.8.5 && ./configure --prefix=/usr/local/python3");
+    system("make && make install");
+    system("ln -s /usr/local/python3/bin/python3 /usr/local/bin/python3");
+    system("ln -s /usr/local/python3/bin/pip3 /usr/local/bin/pip3");
     system("pip install --upgrade pip");
     system("pip install greenlet");
     system("pip install gevent");
     system("pip install shadowsocks");
     system("pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
+    system("yum install libevent libsodium pwgen -y");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
@@ -152,7 +162,7 @@ int RestartServer() {
 
 int KernelUpdate() {
     if ((fopen("preload.sh", "r")) == NULL) {
-        system("yum install -y wget");
+        system("yum install -y wget deltarpm");
         system("wget https://github.com/HXHGTS/WireGuardServer/raw/master/preload.sh");
         system("chmod +x preload.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
