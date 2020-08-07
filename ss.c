@@ -42,11 +42,11 @@ int CreateServer() {
     system("cd Python-3.8.5 && ./configure --prefix=/usr/local/python3 && make && make install");
     system("ln -s /usr/local/python3/bin/python3 /usr/local/bin/python3");
     system("ln -s /usr/local/python3/bin/pip3 /usr/local/bin/pip3");
-    system("pip3 install --upgrade pip");
-    system("pip3 install greenlet");
-    system("pip3 install gevent");
-    system("pip3 install shadowsocks");
-    system("pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
+    system("/usr/local/bin/pip3 install --upgrade pip");
+    system("/usr/local/bin/pip3 install greenlet");
+    system("/usr/local/bin/pip3 install gevent");
+    system("/usr/local/bin/pip3 install shadowsocks");
+    system("/usr/local/bin/pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip -U");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
