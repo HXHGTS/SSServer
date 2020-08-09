@@ -8,3 +8,8 @@ CentOS7搭建Shadowsocks并开启原版BBR
 ```
 sudo yum install -y gcc wget && wget https://github.com/HXHGTS/SSServer/raw/master/ss.c && sudo chmod +x ss.c && gcc -o ss ss.c && sudo ./ss
 ```
+第一次点击安装会升级内核，触发重启，重启后请输入
+```
+sudo ./ss
+```
+并选1继续安装!
