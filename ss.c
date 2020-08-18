@@ -93,18 +93,7 @@ int RunServer() {
         fprintf(config, "\"method\":\"chacha20-ietf-poly1305\",\n");
         fprintf(config, "\"fast_open\":false\n");
         fprintf(config, "}\n");
-        fclose(config);
-        printf("正在优化服务器数据吞吐量与网络连接性能. . .\n");
-        system("echo \"* soft nofile 65535\" > /etc/security/limits.conf");
-        system("echo \"* hard nofile 65535\" >> /etc/security/limits.conf");
-        system("echo \"ulimit -n 65535\" >> /etc/rc.d/rc.local");
-        system("echo \"ulimit -u 65535\" >> /etc/rc.d/rc.local");
-        system("modprobe tcp_bbr");
-        system("echo \"tcp_bbr\" >> /etc/modules-load.d/modules.conf");
-        system("echo \"net.core.default_qdisc = fq\" >> /etc/sysctl.conf");
-        system("echo \"net.ipv4.tcp_congestion_control = bbr\" >> /etc/sysctl.conf");
-        system("sysctl -p");
-        printf("BBR加速已启动!\n");
+        fclose(config); 
         printf("正在将Shadowsocks写入开机启动项. . .\n");
         system("echo \"ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
         system("chmod +x /etc/rc.d/rc.local");
@@ -145,17 +134,18 @@ int RestartServer() {
 }
 
 int KernelUpdate() {
-    if ((fopen("preload.sh", "r")) == NULL) {
+    if ((fopen("KernelUpdate.sh", "r")) == NULL) {
         printf("正在升级新内核. . .\n");
         system("yum install -y wget");
-        system("wget https://github.com/HXHGTS/WireGuardServer/raw/master/preload.sh");
-        system("chmod +x preload.sh");
+        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/KernelUpdate.sh");
+        system("chmod +x KernelUpdate.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
-        system("bash preload.sh");
+        system("bash KernelUpdate.sh");
     }
     else {
-        printf("正在卸载旧内核. . .\n");
-        system("yum remove -y $(rpm -qa | grep kernel | grep -v $(uname -r))");
+        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/TCPO.sh");
+        system("chmod +x TCPO.sh");
+        system("bash TCPO.sh");
     }
     return 0;
 }
