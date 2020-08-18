@@ -108,20 +108,13 @@ int RunServer() {
         printf("正在将Shadowsocks写入开机启动项. . .\n");
         system("echo \"ssserver -c /root/ss.conf -d start\" >> /etc/rc.d/rc.local");
         system("chmod +x /etc/rc.d/rc.local");
-        printf("将服务器DNS修改为Cloudflare DNS + Cisco OpenDNS . . .\n");
-        system("echo \"DNS1=1.1.1.1\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"DNS2=1.0.0.1\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"DNS3=208.67.222.222\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-        system("echo \"nameserver 1.1.1.1\" > /etc/resolv.conf");
-        system("echo \"nameserver 1.0.0.1\" >> /etc/resolv.conf");
-        system("echo \"nameserver 208.67.222.222\" >> /etc/resolv.conf");
         printf("生成的客户端端配置如下:\n");
         printf("-----------------------------\n");
         system("cat ss-client.conf");
         printf("-----------------------------\n");
         printf("请参照上述配置修改客户端!\n");
-        printf("正在重启服务器以应用配置. . .\n");
-        system("reboot");
+        system("ssserver -c ss.conf -d start");
+        printf("Shadowsocks服务器已启动!\n");
     }
     return 0;
 }
