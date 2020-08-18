@@ -70,7 +70,7 @@ int RunServer() {
         system("rm -rf ip.conf");
         config = fopen("ss.conf", "w");
         fprintf(config, "{\n");
-        fprintf(config, "\"server\":\"0.0.0.0\",\n");
+        fprintf(config, "\"server\":\"::\",\n");
         fprintf(config, "\"local_address\": \"127.0.0.1\",\n");
         fprintf(config, "\"local_port\":1080,\n");
         fprintf(config, "\"port_password\":{\n");
