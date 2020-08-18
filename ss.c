@@ -158,6 +158,7 @@ int KernelUpdate() {
         system("chmod +x preload.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
         system("bash preload.sh");
+        system("reboot");
     }
     else {
         system("yum remove -y $(rpm -qa | grep kernel | grep -v $(uname -r))");
