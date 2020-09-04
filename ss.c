@@ -145,14 +145,6 @@ int KernelUpdate() {
         system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/TCPO.sh");
         system("chmod +x TCPO.sh");
         system("bash TCPO.sh");
-        system("echo \"nameserver 8.8.8.8\" > /etc/resolv.conf");
-    system("echo \"nameserver 8.8.4.4\" >> /etc/resolv.conf");
-    system("sed -e '/DNS1=/d;/DNS2=/d;/DNS3=/d' /etc/sysconfig/network-scripts/ifcfg-eth0 > /etc/sysconfig/network-scripts/ifcfg-eth0.temp");
-    system("cp -rf /etc/sysconfig/network-scripts/ifcfg-eth0.temp /etc/sysconfig/network-scripts/ifcfg-eth0");
-    system("rm -rf /etc/sysconfig/network-scripts/ifcfg-eth0.temp");
-    system("echo \"DNS1=8.8.8.8\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-    system("echo \"DNS1=8.8.4.4\" >> /etc/sysconfig/network-scripts/ifcfg-eth0");
-    system("service network restart");
     }
     return 0;
 }
