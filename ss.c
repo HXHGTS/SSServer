@@ -40,7 +40,7 @@ int CreateServer() {
     system("pip3 install greenlet");
     system("pip3 install gevent");
     system("pip3 install wheel");
-    system("pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip");
+    system("pip3 install https://github.com/shadowsocks/shadowsocks/archive/2.9.1.zip");
     printf("Shadowsocks服务器搭建完成!\n");
     return 0;
 }
@@ -136,13 +136,13 @@ int RestartServer() {
 int KernelUpdate() {
     if ((fopen("KernelUpdate.sh", "r")) == NULL) {
         printf("正在升级新内核. . .\n");
-        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/KernelUpdate.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/KernelUpdate.sh");
         system("chmod +x KernelUpdate.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
         system("bash KernelUpdate.sh");
     }
     else {
-        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/TCPO.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/TCPO.sh");
         system("chmod +x TCPO.sh");
         system("bash TCPO.sh");
     }
