@@ -62,7 +62,7 @@ int RunServer() {
         fscanf(config, "%s", passwd);
         fclose(config);
         system("yum install curl -y");
-        system("curl api.myip.la > ip.conf");
+        system("curl icanhazip.com > ip.conf");
         config = fopen("ip.conf", "r");
         fscanf(config, "%s", server_ip);
         fclose(config);
