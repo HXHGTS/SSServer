@@ -62,7 +62,8 @@ int RunServer() {
         fscanf(config, "%s", passwd);
         fclose(config);
         system("yum install curl -y");
-        system("curl icanhazip.com > ip.conf");
+        system("echo '216.239.38.21 ifconfig.me' >> /etc/hosts");
+        system("curl -s ifconfig.me/ip > ip.conf");
         config = fopen("ip.conf", "r");
         fscanf(config, "%s", server_ip);
         fclose(config);
